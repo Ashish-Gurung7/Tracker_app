@@ -73,7 +73,7 @@ class Wallet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vm = Provider.of<TransactionViewModel>(context, listen: true);
-    final list = vm.walletTransactions; // ✅ all transactions
+    final list = vm.walletTransactions; 
 
     return Scaffold(
       appBar: AppBar(title: Text("Wallet")),
@@ -81,26 +81,6 @@ class Wallet extends StatelessWidget {
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () =>
-                        _showAddDialog(context, TransactionType.income),
-                    child:  Text("Add Income"),
-                  ),
-                ),
-                 SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () =>
-                        _showAddDialog(context, TransactionType.expense),
-                    child:  Text("Add Expense"),
-                  ),
-                ),
-              ],
-            ),
-             SizedBox(height: 20),
 
             Expanded(
               child: list.isEmpty
@@ -124,6 +104,27 @@ class Wallet extends StatelessWidget {
                       },
                     ),
             ),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        _showAddDialog(context, TransactionType.income),
+                    child:  Text("Add Income"),
+                  ),
+                ),
+                 SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        _showAddDialog(context, TransactionType.expense),
+                    child:  Text("Add Expense"),
+                  ),
+                ),
+              ],
+            ),
+             
           ],
         ),
       ),
