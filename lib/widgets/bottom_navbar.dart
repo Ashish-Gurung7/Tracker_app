@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracker_app/views/home.dart';
-import 'package:tracker_app/views/profile.dart';
+import 'package:tracker_app/views/wallet.dart';
 
 class BottomNavbar extends StatefulWidget {
   const BottomNavbar({super.key});
@@ -11,7 +11,7 @@ class BottomNavbar extends StatefulWidget {
 
 class _BottomNavbarState extends State<BottomNavbar> {
   int _currentIndex = 0;
-  final List<Widget> _screens = [Home(), Profile()];
+  final List<Widget> _screens = [Home(), Wallet()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +30,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
           },
           items: [
             BottomNavigationBarItem(icon: Image.asset("assets/icons/home.png"), label: "home"),
-            BottomNavigationBarItem(icon: Image.asset("assets/icons/home.png"), label: "profile")
+            BottomNavigationBarItem(icon: Image.asset("assets/icons/wallet.png"), label: "profile")
 
           ]),
       ),
