@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tracker_app/view_models/lend_borrow_view_model.dart';
 import 'package:tracker_app/view_models/transaction_view_model.dart';
 
 import 'package:tracker_app/widgets/bottom_navbar.dart';
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_)=> TransactionViewModel())
+          ChangeNotifierProvider(create: (_)=> TransactionViewModel()),
+          ChangeNotifierProvider(create: (_)=> LendBorrowViewModel())
         ],
       child: MaterialApp(
         title: 'Flutter Demo',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_app/view_models/transaction_view_model.dart';
 import 'package:tracker_app/models/transaction_model.dart';
+import 'package:tracker_app/widgets/text_widgets.dart';
 
 class Wallet extends StatelessWidget {
   const Wallet({super.key});
@@ -16,28 +17,31 @@ class Wallet extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(title),
+          title: Center(
+            child: TextWidgets(
+              text: title,
+              color: Colors.black,
+              fontSized: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: amountController,
                 keyboardType: TextInputType.number,
-                decoration:  InputDecoration(hintText: "Amount"),
+                decoration: InputDecoration(hintText: "Amount"),
               ),
-               SizedBox(height: 10),
+              SizedBox(height: 10),
               TextField(
                 controller: descriptionController,
-                decoration:  InputDecoration(hintText: "Description"),
+                decoration: InputDecoration(hintText: "Description"),
               ),
             ],
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child:  Text("Cancel"),
-            ),
-            ElevatedButton(
+             ElevatedButton(
               onPressed: () {
                 final amountText = amountController.text.trim();
                 final descText = descriptionController.text.trim();
@@ -57,13 +61,29 @@ class Wallet extends StatelessWidget {
                   type: type,
                 );
 
-                Provider.of<TransactionViewModel>(context, listen: false)
-                    .addTransaction(tx);
+                Provider.of<TransactionViewModel>(
+                  context,
+                  listen: false,
+                ).addTransaction(tx);
 
                 Navigator.pop(context);
               },
-              child:  Text("Add"),
+              child: TextWidgets(text: "Add",
+              color: Colors.black,
+              fontSized: 16,
+              fontWeight: FontWeight.w500,),
             ),
+            SizedBox(width: 60,),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: TextWidgets(
+                text: "Cancel",
+                color: Colors.black,
+                fontSized: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+           
           ],
         );
       },
@@ -73,18 +93,17 @@ class Wallet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vm = Provider.of<TransactionViewModel>(context, listen: true);
-    final list = vm.walletTransactions; 
+    final list = vm.walletTransactions;
 
     return Scaffold(
-      appBar: AppBar(title: Text("Wallet")),
+      appBar: AppBar(title: Text("Wallet"), centerTitle: true),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
-
             Expanded(
               child: list.isEmpty
-                  ?  Center(child: Text("No transactions yet"))
+                  ? Center(child: Text("No transactions yet"))
                   : ListView.builder(
                       itemCount: list.length,
                       itemBuilder: (context, index) {
@@ -111,20 +130,19 @@ class Wallet extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () =>
                         _showAddDialog(context, TransactionType.income),
-                    child:  Text("Add Income"),
+                    child: Text("Add Income"),
                   ),
                 ),
-                 SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () =>
                         _showAddDialog(context, TransactionType.expense),
-                    child:  Text("Add Expense"),
+                    child: Text("Add Expense"),
                   ),
                 ),
               ],
             ),
-             
           ],
         ),
       ),

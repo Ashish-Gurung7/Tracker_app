@@ -45,34 +45,18 @@ class TransactionViewModel extends ChangeNotifier {
 
   String amountText(TransactionModel t) {
     final sign = t.type == TransactionType.income ? "+" : "-";
-    return "${sign}Rs ${t.amount.toStringAsFixed(0)}"; // ✅ fixed here
+    return "${sign}Rs ${t.amount.toStringAsFixed(0)}"; 
   }
 
   Color amountColor(TransactionModel t) {
     return t.type == TransactionType.income ? Colors.green : Colors.red;
   }
 
-  // Actions
+ 
   void addTransaction(TransactionModel transaction) {
     _transactionListModel.add(transaction);
     notifyListeners();
   }
 
-  void deleteTransaction(String id) {
-    _transactionListModel.removeWhere((t) => t.id == id);
-    notifyListeners();
-  }
 
-  void clearAll() {
-    _transactionListModel.clear();
-    notifyListeners();
-  }
-
-  // Optional: update/edit support
-  void updateTransaction(TransactionModel updated) {
-    final index = _transactionListModel.indexWhere((t) => t.id == updated.id);
-    if (index == -1) return;
-    _transactionListModel[index] = updated;
-    notifyListeners();
-  }
 }
