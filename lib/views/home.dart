@@ -2,223 +2,211 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_app/view_models/transaction_view_model.dart';
 import 'package:tracker_app/view_models/lend_borrow_view_model.dart';
+import 'package:tracker_app/widgets/lend_borrow_tile.dart';
+import 'package:tracker_app/widgets/mini_stat.dart';
 import 'package:tracker_app/widgets/text_widgets.dart';
+import 'package:tracker_app/widgets/transaction_tile.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final vm = Provider.of<TransactionViewModel>(context, listen: true);
-    final debtVm = Provider.of<LendBorrowViewModel>(context, listen: true);
+    final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: true);
+    final lendBorrowViewModel = Provider.of<LendBorrowViewModel>(context, listen: true);
 
-    final list = vm.recent;
-    final peopleList = debtVm.recentPeople;
+    List recentTransactions = transactionViewModel.recent;
+    List recentPeople = lendBorrowViewModel.recentPeople;
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-             SizedBox(height: 30),
-
-            Container(
-              height: 200,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color:  Color(0xff2F7E79),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                     SizedBox(height: 40),
-                    TextWidgets(
-                      text: "Total Balance",
-                      fontSized: 20,
-                      fontWeight: FontWeight.bold,
+      backgroundColor: Color(0xffF6F7F9),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Container(
+                    height: 240,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xff429690),
+                          Color(0xff2A7C76),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                      ),
                     ),
-                    TextWidgets(
-                      text: "Rs ${vm.balance.toStringAsFixed(0)}",
-                      fontSized: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
-                     SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextWidgets(
-                              text: "Income",
-                              fontSized: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            TextWidgets(
-                              text: "Rs ${vm.totalIncome.toStringAsFixed(0)}",
-                              fontSized: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ],
+                        Center(
+                          child: TextWidgets(
+                            text: transactionViewModel.greeting,
+                            color: Colors.white,
+                            fontSized: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextWidgets(
-                              text: "Expense",
-                              fontSized: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            TextWidgets(
-                              text: "Rs ${vm.totalExpense.toStringAsFixed(0)}",
-                              fontSized: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ],
+                        SizedBox(height: 40),
+
+                        Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(24),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 20,
+                                offset: Offset(0, 10),
+                              )
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextWidgets(
+                                    text: "Total Balance",
+                                    color: Colors.grey.shade500,
+                                    fontSized: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  Icon(Icons.more_horiz, color: Colors.grey.shade400),
+                                ],
+                              ),
+                              SizedBox(height: 8),
+                              TextWidgets(
+                                text: "Rs ${transactionViewModel.balance.toStringAsFixed(0)}",
+                                color: Color(0xff111827),
+                                fontSized: 30,
+                                fontWeight: FontWeight.w800,
+                              ),
+                              SizedBox(height: 24),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: MiniStat(
+                                      icon: Icons.arrow_downward,
+                                      label: "Income",
+                                      value: "Rs ${transactionViewModel.totalIncome.toStringAsFixed(0)}",
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  SizedBox(width: 16),
+                                  Expanded(
+                                    child: MiniStat(
+                                      icon: Icons.arrow_upward,
+                                      label: "Expenses",
+                                      value: "Rs ${transactionViewModel.totalExpense.toStringAsFixed(0)}",
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
+                  ),
+                ],
+              ),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextWidgets(
+                          text: "Transactions History",
+                          color: Color(0xff111827),
+                          fontSized: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        TextWidgets(
+                          text: "See all",
+                          color: Color(0xff6B7280),
+                          fontSized: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+
+                    recentTransactions.isEmpty
+                        ? Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Text("No transactions yet"),
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: recentTransactions.length,
+                            separatorBuilder: (context, index) => SizedBox(height: 0),
+                            itemBuilder: (context, index) {
+                              return TransactionTile(transaction: recentTransactions[index]);
+                            },
+                          ),
+
+                    SizedBox(height: 24),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextWidgets(
+                          text: "Lend / Borrow",
+                          color: Color(0xff111827),
+                          fontSized: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        TextWidgets(
+                          text: "See all",
+                          color: Color(0xff6B7280),
+                          fontSized: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+
+                    recentPeople.isEmpty
+                        ? Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Text("No lend/borrow records yet"),
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: recentPeople.length,
+                            separatorBuilder: (context, index) => SizedBox(height: 0),
+                            itemBuilder: (context, index) {
+                              return LendBorrowTile(record: recentPeople[index]);
+                            },
+                          ),
+                    SizedBox(height: 40),
                   ],
                 ),
               ),
-            ),
-
-            SizedBox(height: 20),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextWidgets(
-                  text: "Transaction History",
-                  color: Colors.black,
-                  fontSized: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                TextWidgets(
-                  text: "See All",
-                  color: Colors.grey,
-                  fontSized: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ],
-            ),
-             SizedBox(height: 10),
-
-            SizedBox(
-              height: 170,
-              child: list.isEmpty
-                  ? Center(
-                      child: TextWidgets(
-                        text: "No transactions yet",
-                        color: Colors.grey,
-                        fontSized: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: list.length,
-                      itemBuilder: (context, index) {
-                        final t = list[index];
-                        return Padding(
-                          padding:  EdgeInsets.symmetric(vertical: 6),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextWidgets(
-                                    text: t.description,
-                                    color: Colors.black,
-                                    fontSized: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  TextWidgets(
-                                    text: vm.formatDate(t.date),
-                                    color: Colors.grey,
-                                    fontSized: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ],
-                              ),
-                              TextWidgets(
-                                text: vm.amountText(t),
-                                color: vm.amountColor(t),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-            ),
-
-            SizedBox(height: 20),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextWidgets(
-                  text: "Loan  transaction",
-                  color: Colors.black,
-                  fontSized: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                TextWidgets(
-                  text: "See All",
-                  color: Colors.grey,
-                  fontSized: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ],
-            ),
-
-            Expanded(
-              child: peopleList.isEmpty
-                  ? Center(child: Text("No lend/borrow yet"))
-                  : ListView.builder(
-                      itemCount: peopleList.length,
-                      itemBuilder: (context, index) {
-                        final r = peopleList[index];
-                        return Padding(
-                          padding:  EdgeInsets.symmetric(vertical: 6),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextWidgets(
-                                    text: r.personName,
-
-                                    color: Colors.black,
-                                    fontSized: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  TextWidgets(
-                                    text: debtVm.formatDate(r.date),
-
-                                    fontSized: 12,
-                                    color: Colors.grey,
-                                  ),
-                                ],
-                              ),
-                              TextWidgets(
-                                text: debtVm.amountText(r),
-
-                                color: debtVm.amountColor(r.type),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
