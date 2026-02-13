@@ -178,10 +178,7 @@ class LendBorrowPage extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            IconButton(
-                              onPressed: () => Navigator.pop(context),
-                              icon: Icon(Icons.arrow_back, color: Colors.white),
-                            ),
+                            SizedBox(width: 48),
                             TextWidgets(
                               text: "Lend & Borrow",
                               fontSized: 20,
